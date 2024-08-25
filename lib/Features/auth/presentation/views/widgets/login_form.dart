@@ -58,7 +58,7 @@ class LoginForm extends StatelessWidget {
               const SizedBox(height: 24),
               InkWell(
                 onTap: () {
-                  //GoRouter.of(context).push(AppRouter.forgetPasswordView);
+                  GoRouter.of(context).push(AppRouter.kForgetPasswordView);
                 },
                 child: Align(
                   alignment: AlignmentDirectional.topEnd,
