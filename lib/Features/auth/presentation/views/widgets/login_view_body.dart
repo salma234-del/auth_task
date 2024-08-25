@@ -6,13 +6,13 @@ import 'package:auth_app/Core/utils/app_sizes.dart';
 import 'package:auth_app/Core/utils/app_strings.dart';
 import 'package:auth_app/Core/utils/app_styles.dart';
 import 'package:auth_app/Core/widgets/custom_background_container.dart';
-import 'package:auth_app/Features/auth/presentation/views/widgets/register_form.dart';
+import 'package:auth_app/Features/auth/presentation/views/widgets/login_form.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class RegisterViewBody extends StatelessWidget {
-  const RegisterViewBody({super.key});
+class LoginViewBody extends StatelessWidget {
+  const LoginViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class RegisterViewBody extends StatelessWidget {
               const SizedBox(height: 25),
               RichText(
                 text: TextSpan(
-                  text: AppStrings.welcomeTo,
+                  text: AppStrings.welcomeBack,
                   style: AppStyles.styleMedium25,
                   children: [
                     const TextSpan(
@@ -46,26 +46,26 @@ class RegisterViewBody extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               const Text(
-                AppStrings.createAccount,
+                AppStrings.haveProductiveDay,
                 style: AppStyles.styleMedium18,
               ),
               const SizedBox(height: 48),
-              const RegisterForm(),
+              const LoginForm(),
               const SizedBox(height: 19),
               RichText(
                 text: TextSpan(
-                  text: AppStrings.haveAccount,
+                  text: AppStrings.dontHaveAccount,
                   style: AppStyles.styleMediumWhite14,
                   children: [
                     TextSpan(
-                      text: AppStrings.signIn,
+                      text: AppStrings.signUp,
                       style: AppStyles.styleMediumWhite14.copyWith(
                         color: AppColors.primary,
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           GoRouter.of(context)
-                              .pushReplacement(AppRouter.kLoginView);
+                              .pushReplacement(AppRouter.kRegisterView);
                         },
                     ),
                   ],

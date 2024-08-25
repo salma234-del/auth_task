@@ -1,49 +1,42 @@
 import 'package:auth_app/Core/helper_functions/email_validator.dart';
-import 'package:auth_app/Core/helper_functions/name_validator.dart';
 import 'package:auth_app/Core/helper_functions/password_validator.dart';
+import 'package:auth_app/Core/helper_functions/save_login_state_to_cache.dart';
 import 'package:auth_app/Core/helper_functions/show_custom_loading.dart';
 import 'package:auth_app/Core/helper_functions/show_custom_snack_bar.dart';
 import 'package:auth_app/Core/utils/app_constants.dart';
 import 'package:auth_app/Core/utils/app_router.dart';
 import 'package:auth_app/Core/utils/app_strings.dart';
+import 'package:auth_app/Core/utils/app_styles.dart';
 import 'package:auth_app/Core/widgets/custom_button.dart';
 import 'package:auth_app/Core/widgets/custom_text_form_field.dart';
-import 'package:auth_app/Features/auth/presentation/view_model/register_cubit/register_cubit.dart';
-import 'package:auth_app/Features/auth/presentation/view_model/register_cubit/register_state.dart';
+import 'package:auth_app/Features/auth/presentation/view_model/login_cubit/login_cubit.dart';
+import 'package:auth_app/Features/auth/presentation/view_model/login_cubit/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class RegisterForm extends StatelessWidget {
-  const RegisterForm({super.key});
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterCubit, RegisterState>(
+    return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state is RegisterSuccess) {
-          _buildRegisterSuccess(context);
-        } else if (state is RegisterFailure) {
-          _buildRegisterFailure(context, state);
-        } else if (state is RegisterLoading) {
-          _buildRegisterLoading(context);
+        if (state is LoginSuccess) {
+          _buildLoginSuccess(context);
+        } else if (state is LoginFailure) {
+          _buildLoginFailure(context, state);
+        } else if (state is LoginLoading) {
+          _buildLoginLoading(context);
         }
       },
       builder: (context, state) {
-        var cubit = BlocProvider.of<RegisterCubit>(context);
+        var cubit = BlocProvider.of<LoginCubit>(context);
         return Form(
           key: cubit.formKey,
           autovalidateMode: cubit.autovalidateMode,
           child: Column(
             children: [
-              CustomTextFormField(
-                hintText: AppStrings.fullName,
-                controller: cubit.fullNameController,
-                prefixIcon: AppConstants.nameIcon,
-                keyboardType: TextInputType.text,
-                validator: nameValidator,
-              ),
-              const SizedBox(height: 40),
               CustomTextFormField(
                 hintText: AppStrings.email,
                 controller: cubit.emailController,
@@ -51,26 +44,41 @@ class RegisterForm extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
                 validator: emailValidator,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 56),
               CustomTextFormField(
                 hintText: AppStrings.pasword,
                 controller: cubit.passwordController,
                 prefixIcon: AppConstants.passwordIcon,
                 keyboardType: TextInputType.visiblePassword,
-                validator: passwordValidator,
                 obscureText: cubit.obscurePass,
                 suffixIcon: cubit.suffixIcon,
                 suffixIconOnPressed: cubit.changeObscurePass,
+                validator: passwordValidator,
               ),
-              const SizedBox(height: 47),
+              const SizedBox(height: 24),
+              InkWell(
+                onTap: () {
+                  //GoRouter.of(context).push(AppRouter.forgetPasswordView);
+                },
+                child: Align(
+                  alignment: AlignmentDirectional.topEnd,
+                  child: Text(
+                    AppStrings.forgetPassword,
+                    style: AppStyles.styleMediumWhite14.copyWith(
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               CustomButton(
-                text: AppStrings.signUp,
+                text: AppStrings.signIn,
                 onPressed: () {
                   if (cubit.formKey.currentState!.validate()) {
-                    cubit.register();
+                    cubit.login();
                     primaryFocus?.unfocus();
                   } else {
-                    cubit.changeAutovalidateMode();
+                    cubit.autovalidateMode = AutovalidateMode.always;
                   }
                 },
               ),
@@ -81,17 +89,13 @@ class RegisterForm extends StatelessWidget {
     );
   }
 
-  void _buildRegisterSuccess(BuildContext context) {
+  void _buildLoginSuccess(BuildContext context) {
     Navigator.of(context).pop();
-    showCustomSnackBar(
-      context: context,
-      message: AppStrings.successfullyRegistered,
-      isSuccess: true,
-    );
-    GoRouter.of(context).go(AppRouter.kLoginView);
+    GoRouter.of(context).go(AppRouter.kHomeView);
+    saveLoginStateToCache();
   }
 
-  void _buildRegisterFailure(BuildContext context, RegisterFailure state) {
+  void _buildLoginFailure(BuildContext context, LoginFailure state) {
     Navigator.of(context).pop();
     showCustomSnackBar(
       context: context,
@@ -100,7 +104,7 @@ class RegisterForm extends StatelessWidget {
     );
   }
 
-  void _buildRegisterLoading(BuildContext context) {
+  void _buildLoginLoading(BuildContext context) {
     showCustomLoading(context: context);
   }
 }
