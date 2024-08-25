@@ -4,17 +4,12 @@
 
 // clang-format off
 
-#include "generated_plugin_registrant.h"
+#ifndef GENERATED_PLUGIN_REGISTRANT_
+#define GENERATED_PLUGIN_REGISTRANT_
 
-#include <cloud_firestore/cloud_firestore_plugin_c_api.h>
-#include <firebase_auth/firebase_auth_plugin_c_api.h>
-#include <firebase_core/firebase_core_plugin_c_api.h>
+#include <flutter/plugin_registry.h>
 
-void RegisterPlugins(flutter::PluginRegistry* registry) {
-  CloudFirestorePluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("CloudFirestorePluginCApi"));
-  FirebaseAuthPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("FirebaseAuthPluginCApi"));
-  FirebaseCorePluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("FirebaseCorePluginCApi"));
-}
+// Registers Flutter plugins.
+void RegisterPlugins(flutter::PluginRegistry* registry);
+
+#endif  // GENERATED_PLUGIN_REGISTRANT_
