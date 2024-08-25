@@ -4,6 +4,8 @@ import 'package:auth_app/Features/auth/presentation/views/register_view.dart';
 import 'package:auth_app/Features/home/presentation/views/home_view.dart';
 import 'package:go_router/go_router.dart';
 
+import '../helper_functions/get_login_state_from_cache.dart';
+
 abstract class AppRouter {
   static const String kInitial = '/';
   static const String kLoginView = '/login';
@@ -15,7 +17,8 @@ abstract class AppRouter {
     routes: [
       GoRoute(
         path: kInitial,
-        builder: (context, state) => const LoginView(),
+        builder: (context, state) =>
+            !getLoginStateFromCache() ? const LoginView() : const HomeView(),
       ),
       GoRoute(
         path: kRegisterView,
